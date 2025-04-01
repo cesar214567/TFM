@@ -1,0 +1,123 @@
+\documentclass[11pt,a4paper,spanish]{book}
+\usepackage{estilo_unir-1}
+\usepackage{apacite}
+
+\usepackage{hyperref}
+\numberwithin{equation}{chapter}
+%\usepackage{caption}
+\numberwithin{figure}{chapter}
+%\usepackage{chngcntr}
+%\counterwithin{equation}{chapter}
+%\counterwithin{figure}{chapter}
+%\counterwithin{table}{chapter}
+%\renewcommand\theequation{\thechapter.\arabic{equation}}
+%\renewcommand\thefigure{\thechapter.\arabic{figure}}
+%\renewcommand\thetable{\thechapter.\arabic{table}}
+%\renewcommand\theequation{\thechapter.\arabic{equation}}
+%\counterwithin{figure}{chapter}
+%\counterwithin{table}{chapter}
+%\renewcommand\thefigure{\thechapter.\arabic{figure}}
+%\renewcommand\thetable{\thechapter.\arabic{table}}
+%\renewcommand\thefigure{\thechapter.\arabic{figure}}
+%\makeatletter
+%\renewcommand\p@figure{\thechapter..\arabic{figure}}
+%\makeatother
+
+
+
+%---------------------------
+%título del trabajo y autor
+%---------------------------
+\title{Optimización de modelos BI-LSTM para la detección de violencia en video}
+\titulacion{Máster en en Ingeniería Matemática y Computación}
+\author{Cesar Antonio Madera Garcés}
+\date{23 de Marzo de 2025}
+\director{ Pablo Negre Rodriguez}
+\nombreciudad{Lima, Perú}
+
+%---------------------------
+%marges
+%---------------------------
+%\usepackage[margin=1.9cm]{geometry}
+%---------------------------
+%---------------------------
+%---------------------------
+%---------------------------
+\begin{document}
+\renewcommand{\listfigurename}{Índice de Ilustraciones}
+\renewcommand{\listtablename}{Índice de Tablas}
+\renewcommand{\contentsname}{Índice de Contenidos}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla} 
+
+\maketitle
+
+\frontmatter
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter{Resumen}
+\input{./content/resumen.tex}
+
+
+
+\chapter{Abstract}
+\input{./content/abstract.tex}
+
+\mainmatter
+\chapter{Introducción}
+\input{./content/introduccion.tex}
+
+
+\chapter{Contexto y Estado del Arte}
+\input{./content/contextoYarte.tex}
+
+\chapter{Identificación de Requisitos}
+\input{./content/requisitos.tex}
+
+\chapter{Objetivos}
+\input{./content/objetivos.tex}
+
+\chapter{Metodología}
+\input{./content/metodologia.tex}
+
+\chapter{Desarrollo del trabajo}
+\input{./content/experimentacion.tex}
+
+\chapter{Conclusiones y Trabajo Futuro}
+\input{./content/conclusiones.tex}
+
+%\begin{thebibliography}{a}
+%\bibitem{etiqueta} \textsc{Autores},
+%\textit{nombre referencia.}
+%Información addicional
+%\end{thebibliography}
+\bibliographystyle{apacite}
+\bibliography{bibliografia}
+
+\appendix
+\chapter{Apendices}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
