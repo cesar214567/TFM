@@ -1,86 +1,88 @@
+La violencia sigue siendo un problema global crítico, con millones 
+de incidentes reportados anualmente. Según la Organización Mundial 
+de la Salud (OMS), la violencia interpersonal ha permanecido como 
+una de las 10 principales causas de muerte anual en las regiones 
+de las Américas, con innumerables casos de agresión física y 
+delitos violentos que no se reportan \cite{WorldHealthOrganization2024}. 
+América Latina, en particular, tiene algunas de las tasas de violencia 
+más altas, con países como Perú, Chile, Brasil, Colombia y México 
+enfrentando importantes desafíos en la prevención del crimen y 
+la seguridad pública \cite{Bisca2024}. En 2024, el Instituto Nacional 
+de Estadística y Geografía (INEGI) reportó 21.9 millones de víctimas 
+mayores de edad solo en México, y 31.3 millones de delitos \cite{INEGI2024}. 
+La creciente disponibilidad de videovigilancia y medios digitales 
+presenta una oportunidad para desarrollar sistemas automatizados 
+capaces de detectar y mitigar incidentes violentos en tiempo real.
 
+La inteligencia artificial (IA) ha emergido como una herramienta 
+potente en el campo del análisis de video, ofreciendo soluciones 
+prometedoras para la detección automatizada de violencia. Los modelos 
+de aprendizaje profundo, particularmente las redes neuronales 
+convolucionales (CNNs) y las redes de memoria a largo y corto plazo 
+(LSTM), han demostrado capacidades excepcionales en el procesamiento 
+de características espaciotemporales de los datos de video \cite{Orozco2021}. 
+Aprovechando estas tecnologías, los sistemas basados en IA pueden 
+analizar flujos de video, reconocer acciones violentas y generar alertas 
+con alta precisión. Sin embargo, desafíos como el desequilibrio de clases, 
+la escasez de datos y los falsos positivos siguen siendo obstáculos 
+críticos en las aplicaciones del mundo real \cite{Kulkarni2021}. Esta 
+investigación tiene como objetivo mejorar la robustez e interpretabilidad 
+de los sistemas de detección de violencia impulsados por IA, contribuyendo 
+a entornos más seguros en México y más allá.
 
+\section{Justificación}
 
-Violence remains a critical global issue, with millions of 
-incidents reported annually. According to the World Health 
-Organization (WHO), interpersonal violence has remained as one 
-of the top 10 causes of deaths per year in the Americas regions, 
-sin with countless more cases of physical aggression and violent 
-crimes going unreported \cite{WorldHealthOrganization2024}. 
-Latin America, in particular, has some of the highest violence rates, 
-with countries like Peru, Chile, Brazil, Colombia, and Mexico experiencing 
-significant challenges in crime prevention and public security 
-\cite{Bisca2024}. In 2024, the National Institute of Statistics and 
-Geography (INEGI) reported 21.9 million legal-age victims only on 
-Mexico, and 31.3 million crimes \cite{INEGI2024}. The rising 
-availability of video surveillance and digital media presents 
-an opportunity to develop automated systems capable of detecting 
-and mitigating violent incidents in real time.
+Las tasas crecientes de violencia en América Latina, 
+particularmente en México como se expuso en la sección anterior, 
+subrayan la urgente necesidad de sistemas avanzados de 
+videovigilancia capaces de detectar incidentes en tiempo real. 
+Los enfoques tradicionales de monitoreo, que dependen de la supervisión 
+humana, a menudo son ineficientes debido a la fatiga cognitiva y 
+las limitaciones en la escalabilidad \cite{Marois2021}. La inteligencia 
+artificial (IA), particularmente el aprendizaje profundo, ha demostrado 
+un gran potencial para automatizar la detección de violencia mediante 
+la integración de redes neuronales convolucionales (CNNs) y redes de 
+memoria a largo y corto plazo (LSTM) \cite{Negre2024,Negre20242,Abdali2019,Sharma2021}. 
+Mientras que las CNNs extraen características espaciales de los 
+fotogramas de video, las LSTMs capturan dependencias temporales, 
+lo que las convierte en una combinación poderosa para analizar 
+escenas dinámicas. Sin embargo, el diseño óptimo de estos modelos 
+sigue siendo un desafío abierto, ya que las variaciones en las 
+arquitecturas de CNN y las configuraciones de LSTM afectan directamente 
+la precisión de la detección, la eficiencia computacional y la aplicabilidad 
+en el mundo real.
 
-Artificial intelligence (AI) has emerged as a powerful tool 
-in the field of video analysis, offering promising solutions 
-for automated violence detection. Deep learning models, 
-particularly convolutional neural networks (CNNs) and 
-long-short term models (LSTM's), have demonstrated 
-exceptional capabilities in processing spatiotemporal 
-features from video data \cite{Orozco2021}. By leveraging 
-these technologies, AI-based systems can analyze video 
-streams, recognize violent actions, and trigger alerts 
-with high accuracy. However, challenges such as class 
-imbalance, data scarcity, and false positives remain 
-critical hurdles in real-world applications\cite{Kulkarni2021}. This 
-research aims to enhance the robustness and interpretability 
-of AI-driven violence detection systems, contributing to 
-safer environments in Mexico and beyond.
+Este estudio busca investigar sistemáticamente el balance 
+entre diferentes extractores de características de CNN y el número 
+de celdas LSTM para determinar la pipeline más efectiva para la 
+detección de violencia. La elección de la CNN influye en la calidad 
+de la extracción de características, mientras que el número de celdas 
+LSTM impacta en la capacidad del modelo para capturar patrones temporales 
+sin incurrir en costos computacionales excesivos. Al optimizar este 
+balance, la investigación busca mejorar tanto el rendimiento como 
+la eficiencia de los sistemas de detección de violencia impulsados por IA. 
+Los resultados contribuirán no solo al avance académico del análisis 
+espaciotemporal de video, sino también al despliegue práctico de soluciones 
+de videovigilancia robustas y escalables, mejorando finalmente la seguridad 
+pública en México y más allá.
 
-\section{Justification}
+A continuación se especifican tanto el enfoque de este 
+trabajo y cual será la estructura del resto del 
+documento.
 
-The escalating rates of violence in Latin America, 
-particularly in Mexico as exposed in the prior section, 
-underscore the urgent need for advanced 
-surveillance systems capable of real-time incident detection. 
-Traditional monitoring approaches, which depend on human 
-oversight, are often inefficient due to cognitive fatigue and 
-limitations in scalability\cite{Marois2021}. Artificial intelligence (AI), 
-particularly deep learning, has demonstrated significant 
-potential in automating violence detection through the 
-integration of convolutional neural networks (CNNs) and 
-long short-term memory (LSTM) networks
-\cite{Negre2024,Negre20242,Abdali2019,Sharma2021}. While CNNs extract 
-spatial features from video frames, LSTMs capture temporal 
-dependencies, making them a powerful combination for analyzing 
-dynamic scenes. However, the optimal design of these models 
-remains an open challenge, as variations in CNN architectures 
-and LSTM configurations directly affect detection accuracy, 
-computational efficiency, and real-world applicability.
+\section{Enfoque de Trabajo}
 
-This study seeks to systematically investigate the trade-off 
-between different CNN feature extractors and the number of LSTM 
-cells to determine the most effective pipeline for violence 
-detection. The choice of CNN influences feature extraction 
-quality, while the number of LSTM cells impacts the model's 
-ability to capture temporal patterns without incurring 
-excessive computational costs. By optimizing this balance, 
-the research aims to improve both the performance and 
-efficiency of AI-driven violence detection systems. The 
-outcomes will contribute not only to the academic advancement 
-of spatiotemporal video analysis but also to the practical 
-deployment of robust and scalable surveillance solutions, 
-ultimately enhancing public safety in Mexico and beyond.
+Habiendo establecido la justificación para esta investigación, 
+es evidente que la selección de técnicas de extracción de 
+características y el número de celdas LSTM juegan un papel crucial 
+en la optimización de los modelos de detección de violencia. Los enfoques 
+existentes a menudo pasan por alto el balance entre estos dos factores, 
+lo que puede limitar el rendimiento en aplicaciones del mundo real. 
+Por lo tanto, este estudio tiene como objetivo evaluar y refinar 
+el balance entre los extractores de características de CNN y las 
+configuraciones de celdas LSTM para desarrollar una pipeline más 
+eficiente y precisa para la detección automatizada de violencia.
 
-\section{Work Approach}
+\section{Estructura del Documento}
 
-Having established the justification for this research, 
-it is evident that the selection of feature extraction 
-techniques and the number of LSTM cells play a crucial 
-role in optimizing violence detection models. Existing 
-approaches often overlook the trade-off between these 
-two factors, potentially limiting performance in real-world 
-applications. Therefore, this study aims to evaluate and 
-refine the balance between CNN feature extractors and LSTM 
-cell configurations to develop a more efficient and accurate 
-pipeline for automated violence detection.
-
-\section{Document Structure}
-
-to be defined
+por definir
