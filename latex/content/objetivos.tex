@@ -1,50 +1,60 @@
 \section{Objetivos}
-En este capítulo se presentarán los objetivos y contribuciones de 
-esta tesis. Una comprensión clara de estos aspectos es 
+
+En este capítulo se presentan los objetivos y contribuciones 
+de esta tesis. Una comprensión clara de estos aspectos es 
 esencial para contextualizar el alcance y la relevancia de 
 esta investigación. Las siguientes secciones ofrecerán una 
-discusión detallada de los objetivos clave perseguidos en 
-este trabajo, así como de las contribuciones que se pretende 
+discusión detallada de los objetivos clave perseguidos en este 
+trabajo, así como de las contribuciones que se pretende 
 aportar al campo.
-\begin{itemize}
-  \item { Objetivo principal: 
-      \begin{itemize}
-          \item optimizar el equilibrio entre la modificación 
-          del extractor de características CNN y el ajuste del 
-          número de celdas LSTM para construir el pipeline más 
-          efectivo para la detección de violencia
-      \end{itemize}
-   }
-   \item { Objetivos secundarios:
-      \begin{itemize}
-          \item Evaluar el impacto de diversas arquitecturas 
-          CNN en la calidad de las características 
-          espaciotemporales extraídas para la detección de 
-          violencia.
-          \item Investigar cómo la variación en el número 
-          de celdas LSTM afecta la modelación temporal y el 
-          rendimiento en la clasificación.
-          \item Identificar el equilibrio óptimo entre la 
-          complejidad de la extracción de características por 
-          CNN y la capacidad de las LSTM para lograr el mejor 
-          rendimiento con un costo computacional mínimo.
-          \item Automatizar el proceso de etiquetado mediante la 
-          creación de una aplicación en tiempo real para el pipeline.
-      \end{itemize}
-      }
-\end{itemize}
+
+El objetivo principal de esta tesis es el diseño e 
+implementación de un \textit{pipeline} que combina el uso de un 
+extractor de características basado en CNN's junto con capas 
+Bi-LSTM para la detección y clasificación de escenas violentas. 
+Junto con ello, se planea optimizar la precisión y la velocidad 
+del mismo haciendo múltiples experimentos modificando el 
+clasificador y el número de celdas BI-LSTM
+con el fin de construir el pipeline más efectivo para la 
+detección automática de violencia en videos. Este objetivo 
+surge de la necesidad de comprender cómo interactúan estos 
+dos componentes fundamentales del aprendizaje profundo en 
+tareas espaciotemporales complejas, como lo es la detección 
+de violencia, y cómo su configuración afecta tanto la 
+precisión como la eficiencia del sistema.
+
+Adicionalmente, se plantean varios objetivos secundarios. 
+En primer lugar, se busca realizar un preprocesado de datos 
+que permita al \textit{pipeline} ser entrenado con ellos. 
+En segundo lugar, se busca evaluar el impacto de diferentes 
+arquitecturas CNN en la calidad de las características 
+espaciotemporales extraídas, entendiendo cómo influyen 
+estas variaciones en el rendimiento del modelo. Por último, 
+se pretende investigar cómo la variación en el número 
+de celdas LSTM afecta la modelación temporal y, por ende, 
+la eficacia en la clasificación de eventos violentos.
 
 \section{Contribuciones}
 
-La contribución principal de esta tesis es el desarrollo de 
-un pipeline optimizado para la detección de violencia que 
-equilibra la complejidad de la extracción de características 
-basada en CNN y el número de celdas LSTM para lograr una 
-mayor precisión y eficiencia. Al analizar sistemáticamente 
-los compromisos entre estos dos componentes, este trabajo 
-proporciona un enfoque estructurado para diseñar arquitecturas 
-de deep learning destinadas al reconocimiento espaciotemporal 
-de violencia, mejorando tanto el rendimiento en la detección 
-como la viabilidad computacional. Esta contribución tiene 
-como objetivo avanzar en el análisis de video impulsado por 
-IA para aplicaciones de vigilancia en tiempo real.
+La contribución principal de esta tesis es el desarrollo 
+de un pipeline optimizado para la detección de violencia 
+que equilibra la complejidad de la extracción de 
+características basada en CNN y el número de celdas LSTM, 
+con el objetivo de lograr una mayor precisión y eficiencia. 
+Al analizar sistemáticamente los compromisos entre estos 
+dos componentes, este trabajo proporciona un enfoque 
+estructurado para el diseño de arquitecturas de aprendizaje 
+profundo orientadas al reconocimiento espaciotemporal de 
+patrones violentos en video.
+
+Este enfoque contribuye significativamente al avance del 
+análisis de video asistido por inteligencia artificial 
+para aplicaciones de vigilancia en tiempo real. A través 
+del diseño y evaluación de múltiples configuraciones 
+arquitectónicas, se demuestra cómo el ajuste preciso de 
+los módulos CNN y LSTM puede resultar en modelos más 
+efectivos y menos costosos computacionalmente. Esta tesis, 
+por tanto, ofrece una guía práctica para investigadores y 
+desarrolladores interesados en implementar soluciones 
+robustas y escalables en escenarios del mundo real donde 
+la detección temprana de violencia es crítica.
