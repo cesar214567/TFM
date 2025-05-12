@@ -84,7 +84,14 @@ pre-procesamiento estructurado en varias etapas:
     \item \textbf{Filtrado y muestreo}: Para reducir la 
     redundancia y el volumen de datos, se aplicó una 
     estrategia de muestreo temporal, extrayendo únicamente un 
-    subconjunto de los frames (por ejemplo, uno de cada cinco). 
+    subconjunto de los frames. Para ello, se propuso un muestreo 
+    con reemplazo en donde se seteó un número final de frames 
+    y se 
+    procedió a obtener un frame cada x de los videos. Se 
+    utilizó este algoritmo para manejar el caso en el que el 
+    número de frames no sea el mismo no solo para el 
+    \textit{dataset} actual, sino para que sea utilizado en 
+    otros ejemplares.
 
 \end{itemize}
 
@@ -101,18 +108,18 @@ métricas de rendimiento:
 
 \begin{itemize}
 
-    \item \textbf{AUC-ROC (Área bajo la curva ROC)}: Evalúa 
-    el rendimiento del modelo en todos los umbrales de 
-    clasificación posibles. Es útil para modelos binarios, 
-    especialmente con clases desbalanceadas.
-    
+    \item \textbf{F1-score}: penaliza fuertemente los errores 
+    y obliga a capturar los positivos y no tener demasiados 
+    falsos positivos.
+    \begin{equation}
+        \text{F1 Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+    \end{equation}
+
     \item \textbf{Tiempo de Inferencia}: Mide el tiempo que 
     el modelo tarda en procesar una secuencia completa o un 
     solo frame. Es crucial para aplicaciones en tiempo real 
     o streaming.
 
-    \item \textbf{Tiempo de Inferencia}: Mide el tiempo que 
-    el modelo tarda en procesar una secuencia completa o un solo frame. Es crucial para aplicaciones en tiempo real o streaming.
 \end{itemize}
 
 \section{Software y hardware utilizados}
@@ -221,4 +228,6 @@ obtenidos en aquella experimentación:
 En la Tabla \ref{table:data1} se puede ver como los mejores resultados 
 fueron obtenidos por EfficientNetB0 y Resnet50 tanto en precisión, velocidad 
 por batch y épocas de entrenamiento, por lo que se utilizarán para 
-el presente trabajo. 
+el presente trabajo. Se utilizará MobilenetV3 como modelo control y además, 
+se utilizará otro modelo EfficientnetV2, el cual es un modelo un poco más 
+pesado pero que brinda una gran mejora en la precisión general. 

@@ -1,0 +1,10 @@
+cnn_model,lstm_cells,train_loss,train_f1,val_loss,val_f1,test_loss,test_f1
+MobilenetV3large,1,0.0562,0.9875,0.1048,0.9716,0.0721,0.9825
+MobilenetV3large,2,0.0527,0.9845,0.2139,0.9287,0.1006,0.9775
+MobilenetV3large,3,0.0237,0.9969,0.1774,0.9408,0.1117,0.965
+MobilenetV3large,4,0.092,0.9655,0.2456,0.8904,0.1914,0.935
+MobilenetV3large,5,0.1141,0.9649,0.3142,0.9295,0.1982,0.9325
+MobilenetV3large,6,0.0376,0.987,0.2237,0.9283,0.1158,0.97
+MobilenetV3large,7,0.0376,0.986,0.1745,0.9537,0.0706,0.9775
+MobilenetV3large,8,0.0497,0.986,0.186,0.9413,0.1219,0.965
+MobilenetV3large,9,0.0807,0.9772,0.1777,0.9282,0.1368,0.9625
