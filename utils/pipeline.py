@@ -1,9 +1,12 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import GlobalAveragePooling2D
 from imageprocessor import get_frames
 import numpy as np
 import h5py
 from utilfunctions import print_progress
+from tensorflow.keras.applications.efficientnet import EfficientNetB0
+from tensorflow.keras.applications.resnet import ResNet50
+from tensorflow.keras import backend as K
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.layers import Bidirectional, LSTM, Dense, Activation, GlobalAveragePooling2D, Flatten
 
 def create_model(model,input_shape): 
     cnn_model = model(input_shape=input_shape, weights='imagenet', include_top=False)
@@ -87,3 +90,27 @@ def make_files(n_files,names,labels,image_model,output_file,frames_per_file,img_
             print_progress(numer, n_files)
         
             numer += 1
+
+def f1_score(y_true, y_pred):
+    y_pred = K.round(y_pred)  # Round to 0 or 1
+    tp = K.sum(K.cast(y_true * y_pred, 'float'), axis=0)
+    fp = K.sum(K.cast((1 - y_true) * y_pred, 'float'), axis=0)
+    fn = K.sum(K.cast(y_true * (1 - y_pred), 'float'), axis=0)
+
+    precision = tp / (tp + fp + K.epsilon())
+    recall = tp / (tp + fn + K.epsilon())
+    
+    f1 = 2 * precision * recall / (precision + recall + K.epsilon())
+    return K.mean(f1)
+
+def getLSTM(cells,chunk_size,n_chunks):
+    model = Sequential()
+    model.add(Bidirectional(LSTM(cells, input_shape=(n_chunks, chunk_size))))
+    model.add(Dense(1024))
+    model.add(Activation('relu'))
+    model.add(Dense(50))
+    model.add(Activation('relu'))
+    model.add(Dense(2))
+    model.add(Activation('softmax'))
+    model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy',f1_score])
+    return model
