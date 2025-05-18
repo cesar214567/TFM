@@ -132,7 +132,7 @@ se puden observar en la Tabla \ref{tabla:procesamiento}:
 \end{table}
 
 Se puede apreciar que el tamaño final de los modelos fue 
-menor que el esperado por la Tabla \ref{evaluación}. 
+menor que el esperado por la Tabla \ref{evaluacion}. 
 Esto se debió a que no se están utilizando las capas densas 
 de los modelos y se estan reemplazando con una capa 
 GlobalAveragePooling2D, la cual obtiene el resultado del 
@@ -154,6 +154,20 @@ de pérdida y f1 score para cada una de los experimentos.
     \label{fig:combinedEfficientnetB0}
 \end{figure}
 
+Los gráficos de la figura \ref{fig:combinedEfficientnetB0} muestran 
+un descenso de la pérdida generada de manera estable, en donde el 
+clasificador con 1 capa se puede apreciar muy separado de las demás 
+configuraciones. Fuera de ella, todas las demás configuraciones obtuvieron 
+resultados muy similares. Sin embargo, se puede apreciar que la 
+configuración con 4 celdas fue la que mejor resultado obtuvo en esa 
+métrica. Algo muy similar se ve en la gráfica de f1 score. La configuración 
+con una y dos celdas generaron peores resultados, mientras que las demás 
+obtuvieron mejores resultados. La diferencia radica en que si consideramos 
+el resultado final después de 8 épocas, la configuración con 9 celdas 
+es la ganadora. Pero si se considera que el early stopping tenía una paciencia de 
+3 épocas, tendríamos que considerar el resultado en la época 6, en donde la 
+configuración con 7 celdas fue la que generó mejores resultados. 
+
 \begin{figure}[h!]
     \centering
     \subfloat[\centering F1 score por época]{\includegraphics[width=0.48\textwidth]{../graphs/efficientnetv2-s_val_loss_per_epoch.png}}
@@ -162,6 +176,13 @@ de pérdida y f1 score para cada una de los experimentos.
     \label{fig:combinedEfficientnetV2}
 \end{figure}
 
+A comparación de la anterior ejecución, los gráficos de la figura 
+\ref{fig:combinedEfficientnetV2} muestran un descenso de la pérdida 
+gerada menos estable. Los resultados no muestran un patrón único, por 
+lo que la única conclusión basada en los datos es que los mejores resultados 
+se obtuvieron con 2 y 5 celdas. Por otra parte, en términos de f1 score se 
+pudo apreciar un mejor entrenamiento y resultado final en la configuración de 
+2 celdas. 
 
 \begin{figure}[h!]
     \centering
@@ -171,6 +192,16 @@ de pérdida y f1 score para cada una de los experimentos.
     \label{fig:MobilenetV3}
 \end{figure}
 
+Utilizando MobileNetV3 se obtuvo un patrón muy distintivo entre la 
+gráfica de pérdida y f1 score. En ambos casos se tuvo un descenso de 
+pérdida muy estables utilizando la configuración de una sola celda, 
+mientras que las demás se comportaron muy erráticamente. Esto es 
+probablemente debido a la configuración del modelo, ya que es uno de 
+los más ligeros del estado del arte (y también de entre los utilizados 
+para esta experimentación). En ese sentido, las configuraciones con 
+múltiples celdas cayeron en un overfitting para los vectores de 
+características salidos de la CNN, por ende generando valores negativos 
+en ambas métricas. 
 
 \begin{figure}[h!]
     \centering
@@ -180,3 +211,153 @@ de pérdida y f1 score para cada una de los experimentos.
     \label{fig:Resnet50}
 \end{figure}
 
+Las ejecuciones de Resnet50 generaron patrones más estables 
+en ambos gráficos. En ese sentido la mayoría tuvo un descenso 
+de la pérdida bastante similar entre ellos. Al compararlos 
+teniendo en cuenta el early stopping, en la época 6 se 
+generó una menor pérdida con el modelo de 6 épocas, lo cuál 
+también concordó con ser el modelo con mejor f1 score de entre 
+todos. Un dato interesante a analizar es el de la configuración 
+con 7 celdas, el cual generó picos erráticos en el entrenamiento, 
+lo cual también se reflejó en el gráfico de f1 score. Además, 
+la configuración de 5 celdas tuvo una mayor cántidad de épocas 
+de entrenamiento a comparación de los demás.
+
+A continuación se muestran las métricas finales por cada uno de 
+los modelos:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
+\textbf{1}           & 0.0347               & 0.9873             & 0.2488             & 0.9408           & 0.0974              & 0.9725            \\ \hline
+\textbf{2}           & 0.1213               & 0.9564             & 0.2392             & 0.9399           & 0.1674              & 0.9525            \\ \hline
+\textbf{3}           & 0.0209               & 0.9902             & 0.1862             & 0.958            & 0.0698              & 0.9825            \\ \hline
+\textbf{4}           & 0.047                & 0.9929             & \textbf{0.1038}    & 0.9541           & 0.1133              & 0.9575            \\ \hline
+\textbf{5}           & 0.058                & 0.979              & 0.1506             & 0.9581           & 0.1049              & 0.97              \\ \hline
+\textbf{6}           & 0.029                & 0.9931             & 0.1599             & 0.9541           & 0.0919              & 0.9725            \\ \hline
+\textbf{7}           & 0.0258               & 0.9933             & 0.1367             & 0.9541           & 0.0691              & \textbf{0.985}    \\ \hline
+\textbf{8}           & 0.0214               & 0.9929             & 0.2205             & 0.9412           & 0.1213              & 0.9625            \\ \hline
+\textbf{9}           & \textbf{0.012}       & \textbf{0.9961}    & 0.1564             & \textbf{0.9667}  & \textbf{0.0605}     & \textbf{0.98}     \\ \hline
+\end{tabular}
+\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para EfficientNetB0.}
+\label{table:efficientnetb0Metrics}
+\end{table}
+
+
+En la tabla \ref{table:efficientnetb0Metrics} se las tienen 
+métricas de pérdida y f1 score para todas las etapas: 
+entrenamiento, validación y testeo para cada una de las 
+configuraciones. En ella se puede ver que los mejores 
+resultados de manera casi general fue la configuración de 9 
+celdas, lo cual no se refleja con los resultados de validación 
+que se vieron en los gráficos de pérdida y f1 score anteriormente 
+mostrados. 
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
+\textbf{1}  & 0.0833               & 0.9693             & 0.2338             & 0.932            & 0.12                & 0.9675            \\ \hline
+\textbf{2}  & 0.048                & 0.9869             & \textbf{0.1492}    & \textbf{0.9586}  & 0.0849              & 0.9775            \\ \hline
+\textbf{3}  & 0.185                & 0.9349             & 0.3138             & 0.8779           & 0.2181              & 0.9175            \\ \hline
+\textbf{4}  & 0.1111               & 0.9605             & 0.268              & 0.9187           & 0.1375              & 0.96              \\ \hline
+\textbf{5}  & 0.0228               & 0.9936             & 0.1915             & 0.927            & 0.0666              & \textbf{0.9825}   \\ \hline
+\textbf{6}  & 0.0396               & 0.9875             & 0.1626             & \textbf{0.9537}  & 0.0789              & \textbf{0.98}     \\ \hline
+\textbf{7}  & 0.1473               & 0.9402             & 0.2269             & 0.932            & 0.1458              & 0.96              \\ \hline
+\textbf{8}  & 0.0504               & 0.9872             & 0.1829             & 0.9139           & 0.1408              & 0.95              \\ \hline
+\textbf{9}  & \textbf{0.018}       & \textbf{0.9969}    & 0.2741             & 0.9295           & \textbf{0.0649}     & \textbf{0.9825}   \\ \hline
+\end{tabular}
+\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para EfficientnetV2.}
+\label{table:efficientnetV2Metrics}
+\end{table}
+
+A comparación de la anterior tabla, utilizando los datos de la tabla 
+\ref{table:efficientnetV2Metrics} no se puede sacar una conclusión 
+específica acerca de cual configuración es la mejor a comparación del resto. 
+Esto se puede ver debido a que los mejores resultados (obtenidos con 9 celdas) 
+son diferentes para validación que para entrenamiento y testing. Además, 
+al revisar los datos de los gráficos de validación mostrados anteriormente, se 
+pudo ver que este estaba generando un ligero overfitting. 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
+\textbf{1}           & 0.0562               & 0.9875             & \textbf{0.1048}    & \textbf{0.9716}  & \textbf{0.0721}     & \textbf{0.9825}   \\ \hline
+\textbf{2}           & 0.0527               & 0.9845             & 0.2139             & 0.9287           & 0.1006              & 0.9775            \\ \hline
+\textbf{3}           & \textbf{0.0237}      & \textbf{0.9969}    & 0.1774             & 0.9408           & 0.1117              & 0.965             \\ \hline
+\textbf{4}           & 0.092                & 0.9655             & 0.2456             & 0.8904           & 0.1914              & 0.935             \\ \hline
+\textbf{5}           & 0.1141               & 0.9649             & 0.3142             & 0.9295           & 0.1982              & 0.9325            \\ \hline
+\textbf{6}           & 0.0376               & 0.987              & 0.2237             & 0.9283           & 0.1158              & 0.97              \\ \hline
+\textbf{7}           & 0.0376               & 0.986              & 0.1745             & 0.9537           & \textbf{0.0706}     & 0.9775            \\ \hline
+\textbf{8}           & 0.0497               & 0.986              & 0.186              & 0.9413           & 0.1219              & 0.965             \\ \hline
+\textbf{9}           & 0.0807               & 0.9772             & 0.1777             & 0.9282           & 0.1368              & 0.9625            \\ \hline
+\end{tabular}
+\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para MobileNetV3.}
+\label{table:MobileNetV3Metrics}
+\end{table}
+
+La tabla \ref{table:MobileNetV3Metrics} muestra resultados más 
+concluyentes a comparación de las demás. Al igual que con los gráficos 
+anteriores, se puede ver que si bien no se obtuvieron los mejores 
+resultados finales para entrenamiento, si lo hizo para prueba y testeo. 
+Además, se puede ver que estos empeoran mientras más celdas de BI-LSTM 
+se usan. En ese sentido, se puede afirmar que esta es la mejor 
+configuración para este modelo, 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
+\textbf{1}           & 0.1039               & 0.9769             & 0.1382             & \textbf{0.9716}  & 0.116               & 0.9725            \\ \hline
+\textbf{2}           & 0.0907               & 0.9808             & 0.2067             & 0.9448           & 0.1111              & 0.97              \\ \hline
+\textbf{3}           & 0.0837               & 0.9771             & \textbf{0.1177}    & 0.9586           & 0.1183              & 0.9675            \\ \hline
+\textbf{4}           & \textbf{0.0471}      & \textbf{0.9904}    & 0.1298             & 0.9537           & \textbf{0.0858}     & \textbf{0.98}     \\ \hline
+\textbf{5}           & \textbf{0.049}       & \textbf{0.993}     & 0.1499             & 0.9148           & \textbf{0.0866}     & \textbf{0.9775}   \\ \hline
+\textbf{6}           & 0.0925               & 0.9649             & 0.1553             & 0.9541           & 0.0973              & 0.975             \\ \hline
+\textbf{7}           & 0.1106               & 0.9551             & 0.18               & 0.9448           & 0.1374              & 0.9525            \\ \hline
+\textbf{8}           & 0.1262               & 0.9576             & 0.1257             & 0.9399           & 0.1074              & 0.975             \\ \hline
+\textbf{9}           & 0.0624               & 0.9872             & 0.1742             & \textbf{0.9716}  & 0.1188              & 0.97              \\ \hline
+\end{tabular}
+\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para Resnet50.}
+\label{table:Resnet50}
+\end{table}
+
+Observando los datos de la tabla \ref{table:Resnet50} es 
+notorio que los mejores resultados estuvieron en las 
+configuraciones medias (4 y 5 celdas). Además también se 
+logra idntificar que mientras más o menos celdas, todas las 
+métricas se reducen, salvo con el caso de 9 celdas, el cual 
+es un dato anómalo en esa distribución. 
+
+Por último, a continuación se mostrará una tabla comparativa 
+resumen de toda la experimentación realizada en el presente trabajo: 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{cnn\_model}     & \textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
+\textbf{EfficientNetB0} & 9                    & \textbf{0.012}       & \textbf{0.9961}    & 0.1564             & \textbf{0.9716}  & \textbf{0.0605}     & \textbf{0.98}     \\ \hline
+\textbf{EfficientNetV2} & 9                    & 0.018                & \textbf{0.9969}    & 0.2741             & 0.9295           & \textbf{0.0649}     & \textbf{0.9825}   \\ \hline
+\textbf{MobileNetV3}    & 1                    & 0.0562               & 0.9875             & \textbf{0.1048}    & \textbf{0.9716}  & 0.0721              & \textbf{0.9825}   \\ \hline
+\textbf{ResNet50}       & 4                    & 0.0471               & 0.9904             & 0.1298             & 0.9537           & 0.0858              & \textbf{0.98}     \\ \hline
+\end{tabular}
+\caption{ Tabla comparativa resumen final de la experimentación}
+\label{table:Resnet50}
+\end{table}
+
+Con los resultados finales se puede corroborar que todas las 
+combinaciones entre CNN y LSTM lograron valores similares para 
+todas las métricas de testeo al tener un f1 score . En ese sentido, 
+y con el fin de optimizar el \textit{pipeline} final para el 
+\textit{dataset} propuesto, sería recomendable utilizar MobileNetV3 
+con una celda LSTM, ya que proporcionó el mismo resultado pero tanto 
+el peso del modelo como el número de celdas es menor que en todas las 
+demás configuraciones.
