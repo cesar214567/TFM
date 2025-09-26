@@ -112,5 +112,7 @@ def getLSTM(cells,chunk_size,n_chunks):
     model.add(Activation('relu'))
     model.add(Dense(2))
     model.add(Activation('softmax'))
-    model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy',f1_score])
+    model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy',
+                                                                        #f1_score
+                                                                        ])
     return model

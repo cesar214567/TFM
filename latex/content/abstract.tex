@@ -1,6 +1,20 @@
-{\bf Nota:} En este apartado se introducirá un breve resumen en español 
-del trabajo realizado (extensión máxima: 150 palabras). Este resumen 
-debe incluir el objetivo o propósito de la investigación, la metodología, 
-los resultados y las conclusiones.
+This work aims to evaluate the performance of different 
+hybrid CNN-BiLSTM architectures for automatic violence 
+detection in videos using the Hockey Fights dataset. A 
+classification pipeline was designed by combining 
+convolutional neural networks (ResNet50, EfficientNetB0, 
+EfficientNetV2, and MobileNetV3) with bidirectional long 
+short-term memory (Bi-LSTM) layers, varying the number of 
+layers from 1 to 9. Each configuration was trained and 
+evaluated using standard classification metrics such as 
+accuracy, loss, and inference time. The results showed 
+that all pipelines achieved optimal performance (99\% 
+test accuracy), although with different Bi-LSTM 
+configurations. Considering all the evaluation metrics, 
+EfficientNetB0 proved to be the most stable model, offering 
+better results in terms of precision, computational 
+efficiency, and generalization.
 
-{\bf Palabras Clave:} Se deben incluir de 3 a 5 palabras claves en inglés
+{\bf Keywords:} violence detection, Convolutional Neural Networks, 
+Bidirectional-Long Short Term Memory, 
+sequence classification, video analysis

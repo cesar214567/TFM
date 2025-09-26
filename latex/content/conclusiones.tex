@@ -2,28 +2,28 @@ A lo largo del desarrollo experimental de este trabajo, se
 exploraron diversas configuraciones arquitectónicas con el 
 objetivo de determinar la combinación óptima entre complejidad 
 estructural y rendimiento en la tarea de detección de violencia 
-en videos del \textit{dataset} Hockey Fights. Las pruebas 
+en videos del \textit{dataset Hockey Fights}. Las pruebas 
 realizadas incluyeron variantes en los modelos de CNN utilizados 
 para la extracción de características y el número de unidades LSTM. 
 No obstante, a pesar de estas diferencias en la arquitectura, 
 los resultados obtenidos de las mejores configuraciones para cada 
-CNN en el conjunto de prueba fueron notablemente consistentes.
+CNN en el conjunto de prueba fueron notablemente consistentes.\\
 
 Todos los modelos evaluados alcanzaron un desempeño muy similar en 
-términos del F1 score, con un valor promedio de 98.25\%, lo que 
+términos del \textit{accuracy}, con un valor promedio de 98.75\%, lo que 
 pone de manifiesto la solidez del enfoque adoptado. Este 
 comportamiento sugiere que la calidad de las representaciones 
 generadas por la red convolucional utilizada como extractor de 
-características (MobileNetV3) resulta suficientemente 
+características (EfficientNetB0) resulta suficientemente 
 informativa para que incluso una configuración secuencial mínima 
-(como una única unidad LSTM) sea capaz de capturar de manera 
+(como 5 celdas Bi-LSTM) sea capaz de capturar de manera 
 efectiva la dinámica temporal relevante para la clasificación. 
 En consecuencia, se concluye que el sistema propuesto no solo 
 ofrece un alto rendimiento en términos de precisión, sino que 
 también presenta ventajas en cuanto a eficiencia computacional y 
 simplicidad, factores especialmente valiosos para futuras 
 implementaciones en entornos con recursos limitados o 
-aplicaciones en tiempo real.
+aplicaciones en tiempo real.\\
 
 Como línea de trabajo futuro, se propone profundizar en el 
 análisis de arquitecturas más complejas que integren mecanismos 
@@ -33,7 +33,7 @@ pueden aportar mejoras adicionales en tareas de clasificación
 de video más exigentes o en contextos con mayor variabilidad 
 visual. Asimismo, sería pertinente validar la robustez del 
 modelo actual frente a escenarios del mundo real mediante su 
-evaluación en datasets más extensos, heterogéneos y no balanceados, 
+evaluación en \textit{datasets} más extensos, heterogéneos y no balanceados, 
 que representen condiciones variadas de iluminación, movimiento 
 de cámara, resolución y presencia de ruido. También se considera 
 de interés explorar técnicas de aprendizaje auto-supervisado 

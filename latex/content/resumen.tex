@@ -1,6 +1,23 @@
-{\bf Nota:} En este apartado se introducirá un breve resumen en 
-español del trabajo realizado (extensión máxima: 150 palabras). 
-Este resumen debe incluir el objetivo o propósito de la investigación, 
-la metodología, los resultados y las conclusiones.
+Este trabajo tiene como propósito evaluar el desempeño de 
+distintas arquitecturas híbridas CNN-Bi-LSTM para la detección 
+automática de violencia en vídeos, utilizando el 
+\textit{dataset Hockey Fights}. Se diseñó un \textit{pipeline} 
+de clasificación que combina extractores de características 
+basados en redes neuronales convolucionales (ResNet50, 
+EfficientNetB0, EfficientNetV2 y MobileNetV3) con capas 
+bidireccionales de memoria a corto y largo plazo (Bi-LSTM), 
+variando su cantidad de 1 a 9 capas. Cada combinación fue 
+entrenada y evaluada utilizando métricas estándar como precisión, 
+pérdida y tiempo de inferencia. Los resultados mostraron que 
+todas las configuraciones alcanzaron un \textit{accuracy} de 
+prueba del 99\%, aunque con diferentes configuraciones de 
+celdas Bi-LSTM. Al comparar todas las métricas, EfficientNetB0 
+fue la arquitectura más estable, logrando el mejor equilibrio 
+entre rendimiento, eficiencia computacional y capacidad de 
+generalización. Estos hallazgos son relevantes para aplicaciones 
+en análisis de vídeo en tiempo real y sistemas de vigilancia 
+inteligentes.
 
-{\bf Palabras Clave:} Se deben incluir de 3 a 5 palabras claves en español
+{\bf Palabras Clave:} detección de violencia, Redes Neuronales Convolucionales,
+Bidirectional-Long Short Term Memory, EfficientNetB0, 
+clasificación de sequencias, análisis de video.

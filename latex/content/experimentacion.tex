@@ -6,126 +6,84 @@ explicación del \textit{pipeline}, la experimentación
 con las diferentes configuraciones de BI-LSTM y la 
 comparativa de los resultados.
 
-\section{Pipeline propuesto}
+En la Sección \ref{software} se explican las especificaciones de 
+\textit{software} y \textit{hardware} que se necesitaron para la 
+realización del trabajo.\\
 
-La Imagen \ref{metodologia} ilustra la metodología propuesta, 
-la cual se procederá a explicar a continuación:
+Mientras que en la Sección \ref{experimentacion} se detallan todos los experimentos 
+realizados con cada una de las diferentes configuraciones y sus 
+resultados.\\
 
-\begin{figure}[h!] 
-    \includegraphics[width=0.7\textwidth]{images/metodologiaMaestria.png} 
-    \centering 
-    \caption{Metodología propuesta. Creación propia.} 
-    \label{metodologia} 
-\end{figure}
+Por último, en la Sección {comparativa} se realiza la comparativa de 
+todos los resultados obtenidos considerando el promedio y las mejores 
+ejecuciones del \textit{pipeline} para finalmente poder obtener una 
+conclusión acerca de la influencia del número de capas Bi-LSTM con 
+respecto a los resultados finales obtenidos. 
 
-El \textit{pipeline} consiste en la obtencion, preprocesamiento 
-y almacenamiento de las caracteristicas obtenidas del 
-\textit{dataset}, para luego ser pasado a las diferentes 
-configuraciones de los modelos BI-LSTM, los cuales se 
-encargarán cada video basado en sus frames y finalmente 
-se evaluarán los resultados basados en la métrica f1 y 
-el tiempo de inferencia.
+\section{Software y Hardware}\label{software}
 
-\subsection{Extracción de frames y preprocesamiento}
-
-Como primer paso de la metodología se necesitó realizar un 
-preprocesamiento de los datos para su análisis posterior a 
-través de los modelos mencionados en el anterior capítulo. 
-Como primer paso, se procedió a descargar el 
-\textit{dataset} a través de su repositorio de 
-\href{https://www.kaggle.com/datasets/yassershrief/hockey-fight-vidoes/data}{Kaggle}. \\
-
-Una vez obtenidos los datos, se procedió a etiquetar cada uno 
-de los videos basados en los nombres de cada uno de ellos. 
-Se puede diferenciar su etiqueta debido a que aquellos que 
-comiencen con "fi" contienen violencia, mientra que los demás, 
-no. Con los videos cargados, se recolectaron los frames tal 
-como fue mencionado anteriormente. Para ello, se decidió 
-hacer un muestreo de 10 frames de manera equitativamente 
-separada del video (1 por cada 4 frames). Cada uno de estos 
-frames fueron redimensionados a un formato estandar (224 x 224) 
-para luego ser normalizados.
-
-\subsection{Obtención de las características}
-
-Con cada conjunto de frames por video, estos pasan a través de 
-las diferentes arquitecturas de CNN mencionadas en el anterior 
-capítulo. Para ello, se tuvieron las siguientes consideraciones: 
-\begin{itemize}
-    \item Se obtendrán los modelos pre-entrenados con el 
-    dataset ImageNet.
-    \item Se eliminan las capas de clasificación.
-    \item Se agrega una capa GlobalAveragePooling2D para 
-    reducir la dimensionalidad de kernels(resultado de las CNN). 
-    \item Se marca al modelo final como no entrenable.
-\end{itemize}
- 
-Este ultimo paso es necesario debido a que se utilizará el 
-conocimiento pre-entrenado de los modelos para obtener 
-únicamente el vector característico de cada una de las 
-imágenes. En ese sentido, se hace innecesario el proceso de 
-entrenamiento de estas. Además, sería contraproducente tanto 
-entrenar una CNN basado únicamente en frames porque pueden 
-existir casos en el que existen frames donde no hay violencia 
-y viceversa y también debido a que se perdería parte del 
-conocimiento que ya tienen estos modelos. Finalemente se 
-procedió a guardar estos vectores de características en 
-formato h5. \\
-
-Cabe resaltar que en la realidad podría implementarse un 
-modelo conjunto con la CNN y LSTM, pero algunos de los modelos 
-(especialmente los EfficientNet) contienen capas que no son 
-facilmente mapeables a las entradas de las BI-LSTM, por lo 
-cual se tuvo que hacer esto como  preprocesamiento.
-
-\subsection{Entrenamiento y prueba del clasificador}
-
-Como clasificador, se tuvo un modelo de BI-LSTM con diferente 
-número de celdas. Para esta experimentación, se decidió usar 
-un número entre 1 y 9 celdas, ya que consistía en un dataset 
-bastante sencillo y altamente estudiado anteriormente. 
-
-Para cada uno de las CNN's mencionadas en la anterior sección, 
-y para cada una de las configuraciones, se procedió a 
-entrenar y testear cada combinación de ellas. Las consideraciones 
-para esta arquitectura fueron las siguientes:
-
-\begin{itemize}
-    \item De entrada se tienen los vectores de características 
-    obtenidos del paso anterior (se debe considerar que los 
-    tamaños de salida puden variar con respecto a la CNN). 
-    \item Se crea un modelo BI-LSTM con X celdas, 10 timesteps 
-    (en otras palabras los 10 frames obtenidos) y el tamaño 
-    del output del anterior paso.
-    \item Capas densas de 1024, 50 y 2 neuronas con funciones 
-    de activación RelU y la última de tipo softmax. 
-    \item Función de pérdida Binary CrossEntropy, optimizador adam 
-    y de métricas accuracy y f1-score.
-    \item Función de early stopping con \textit{patience} de 3 y  
-    \textit{min delta} de 0.005 y batch de 16 videos por vez.
-\end{itemize}
-
-En la siguiente sección se presentarán los resultados 
-generados utilizando las anteriores consideraciones para 
-cada uno de los modelos mencionados.
-
-\section{Experimentación}
-
-Como primer paso, se procedió a realizar el pre-procesamiento 
-de las imágenes y la obtención de sus características tal 
-como fue mencionado anteriormente. Para ello, se recolectaron 
-las métricas acerca de la cantidad de parámetros y el 
-tiempo de cálculo de cada uno de los modelos, los cuales 
-se puden observar en la Tabla \ref{tabla:procesamiento}:
+A lo largo de toda la experimentación, se utiliza
+un computador de escritorio. Los detalles de la misma se encuentran en 
+la Tabla \ref{caracteristicas}.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{|l|r|r|}
+\caption{Características del computador utilizado para el trabajo.}
+
+\begin{tabular}{|r|r|}
+\hline
+\textbf{Componente} & \textbf{Descripción} \\ \hline
+Procesador & AMD Ryzen 7 3700X 8-Core 3.6 GHz. \\ \hline
+Memoria RAM & Crucial Ballistix 16GB DDR4 - 3600MHZ \\ \hline
+Tarjeta Gráfica & Nvidia RTX 2060 6GB \\ \hline
+\end{tabular}
+\label{caracteristicas}
+\end{table}
+
+Por otra parte, se utilizó Python, junto con Keras, Sklearn y Tensorflow 
+para el desarrollo del \textit{pipeline} en general y el pre y post 
+procesamiento de los datos. Para el procesamiento de las imágenes (con Yolo) 
+se utilizó OpenCV compilado con cudnn para la habilitación del uso de tarjeta gráfica. 
+
+\section{Experimentación} \label{experimentacion}
+
+La presente Sección se subdivide en dos partes: la Sección \ref{procesamiento} 
+revisa la creación de la CNN encargada de extraer las características de cada uno 
+de los frames, mientras que la Sección \ref{clasificacion} presenta la 
+experimentación de las diferentes configuraciones de la Bi-LSTM con múltiples 
+capas.\\
+
+En la Sección \ref{procesamiento} se detallan los pasos del 
+procesamiento, los resultados provenientes del mismo y una tabla 
+comparativa con métricas específicas por modelo de CNN a utilizar. 
+
+Mientras que en la Sección \ref{clasificacion} se detallan los 
+resultados obtenidos de utilizar diferentes configuraciones de capas 
+Bi-LSTM para clasificar los vectores característicos obtenidos de los 
+\textit{frames}. 
+
+
+\subsection{Preprocesamiento y obtención de características}\label{procesamiento}
+
+Como primer paso, se procede a realizar el pre-procesamiento 
+de las imágenes y la obtención de sus características tal 
+como fue mencionado anteriormente. Para ello, se utilizan los modelos 
+con sus pesos preentrenados con el \textit{dataset ImageNet}. Además, se 
+congelan todas sus capas convolucionales y eliminan todas las demás. Por último 
+se agrega una capa \textit{GlobalAveragePooling2D}. Una vez terminado, 
+se recolectan las métricas acerca de la cantidad de parámetros y el 
+tiempo de cálculo por batch de cada uno de los modelos, los cuales 
+se puden observar en la Tabla \ref{tabla:preprocesamiento}:
+
+\begin{table}[h!]
+\centering
+\caption{Tabla comparativa de los parámetros y tiempo de inferencia por modelo.}
+\begin{tabular}{|l|l|l|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Parámetros}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Timpo de inferencia\\ (por batch de 10)\\ en ms/batch\end{tabular}}} \\ \hline
-\textbf{efficientnetb0}               & 4,049,571                                & 46 ms                                                                                                                       \\ \hline
-\textbf{resnet50}                     & 23,587,712                               & 51 ms                                                                                                                       \\ \hline
-\textbf{efficientnetv2-s}             & 20,331,360                               & 75 ms                                                                                                                       \\ \hline
+\textbf{Efficientnetb0}               & 4,049,571                                & 46 ms                                                                                                                       \\ \hline
+\textbf{Resnet50}                     & 23,587,712                               & 51 ms                                                                                                                       \\ \hline
+\textbf{Efficientnetv2-s}             & 20,331,360                               & 75 ms                                                                                                                       \\ \hline
 \textbf{MobilenetV3large}             & 2,996,352                                & 45 ms                                                                                                                       \\ \hline
 \end{tabular}
 \label{tabla:preprocesamiento}
@@ -133,231 +91,299 @@ se puden observar en la Tabla \ref{tabla:procesamiento}:
 
 Se puede apreciar que el tamaño final de los modelos fue 
 menor que el esperado por la Tabla \ref{evaluacion}. 
-Esto se debió a que no se están utilizando las capas densas 
+Esto se debe a que no se están utilizando las capas densas 
 de los modelos y se estan reemplazando con una capa 
 GlobalAveragePooling2D, la cual obtiene el resultado del 
-kernel final de las capas convolucioanles y las reduce a un 
+kernel final de las capas convolucionales y las reduce a un 
 solo resultado promediado. 
 
-Habiendo obtenido las características de cada uno de las 
+\subsection{Clasificación de los videos a través de la Bi-LSTM}\label{clasificacion}
+
+Después de obtener las características de cada uno de las 
 imágenes y los diez frames generados por cada uno de ellas, 
-se entrenaron diferentes modelos BI-LSTM como fue mencionado 
+se entrenan diferentes modelos BI-LSTM como fue mencionado 
 anteriormente, teniendo desde 1 a 10 celdas para cada uno de 
-los CNN utilizados. A continuación se muestran las gráficas 
-de pérdida y f1 score para cada una de los experimentos. 
+las CNN utilizados tal como se menciona en la Sección 
+\ref{pipeline}. A continuación se explican los resultados para cada 
+una de los diferentes experimentos realizados.\\
 
-\begin{figure}[h!]
-    \centering
-    \subfloat[\centering F1 score por época]{\includegraphics[width=0.48\textwidth]{../graphs/efficientnetb0_val_loss_per_epoch.png}}
-    \subfloat[\centering Pérdida por época]{\includegraphics[width=0.48\textwidth]{../graphs/efficientnetb0_val_f1_per_epoch.png}}\hfill
-    \caption{Gráficos de pérdida y f1 score por época usando EfficientNetB0}
-    \label{fig:combinedEfficientnetB0}
-\end{figure}
+\textbf{\underline{Resultados obtenidos con EfficientNetB0}}\\
 
-Los gráficos de la figura \ref{fig:combinedEfficientnetB0} muestran 
-un descenso de la pérdida generada de manera estable, en donde el 
-clasificador con 1 capa se puede apreciar muy separado de las demás 
-configuraciones. Fuera de ella, todas las demás configuraciones obtuvieron 
-resultados muy similares. Sin embargo, se puede apreciar que la 
-configuración con 4 celdas fue la que mejor resultado obtuvo en esa 
-métrica. Algo muy similar se ve en la gráfica de f1 score. La configuración 
-con una y dos celdas generaron peores resultados, mientras que las demás 
-obtuvieron mejores resultados. La diferencia radica en que si consideramos 
-el resultado final después de 8 épocas, la configuración con 9 celdas 
-es la ganadora. Pero si se considera que el early stopping tenía una paciencia de 
-3 épocas, tendríamos que considerar el resultado en la época 6, en donde la 
-configuración con 7 celdas fue la que generó mejores resultados. 
-
-\begin{figure}[h!]
-    \centering
-    \subfloat[\centering F1 score por época]{\includegraphics[width=0.48\textwidth]{../graphs/efficientnetv2-s_val_loss_per_epoch.png}}
-    \subfloat[\centering Pérdida por época]{\includegraphics[width=0.48\textwidth]{../graphs/efficientnetv2-s_val_f1_per_epoch.png}}\hfill
-    \caption{Gráficos de pérdida y f1 score por época usando EfficinetnetV2-S}
-    \label{fig:combinedEfficientnetV2}
-\end{figure}
-
-A comparación de la anterior ejecución, los gráficos de la figura 
-\ref{fig:combinedEfficientnetV2} muestran un descenso de la pérdida 
-gerada menos estable. Los resultados no muestran un patrón único, por 
-lo que la única conclusión basada en los datos es que los mejores resultados 
-se obtuvieron con 2 y 5 celdas. Por otra parte, en términos de f1 score se 
-pudo apreciar un mejor entrenamiento y resultado final en la configuración de 
-2 celdas. 
-
-\begin{figure}[h!]
-    \centering
-    \subfloat[\centering F1 score por época]{\includegraphics[width=0.48\textwidth]{../graphs/MobilenetV3large_val_loss_per_epoch.png}}
-    \subfloat[\centering Pérdida por época]{\includegraphics[width=0.48\textwidth]{../graphs/MobilenetV3large_val_f1_per_epoch.png}}\hfill
-    \caption{Gráficos de pérdida y f1 score por época usando MobilenetV3}
-    \label{fig:MobilenetV3}
-\end{figure}
-
-Utilizando MobileNetV3 se obtuvo un patrón muy distintivo entre la 
-gráfica de pérdida y f1 score. En ambos casos se tuvo un descenso de 
-pérdida muy estables utilizando la configuración de una sola celda, 
-mientras que las demás se comportaron muy erráticamente. Esto es 
-probablemente debido a la configuración del modelo, ya que es uno de 
-los más ligeros del estado del arte (y también de entre los utilizados 
-para esta experimentación). En ese sentido, las configuraciones con 
-múltiples celdas cayeron en un overfitting para los vectores de 
-características salidos de la CNN, por ende generando valores negativos 
-en ambas métricas. 
-
-\begin{figure}[h!]
-    \centering
-    \subfloat[\centering F1 score por época]{\includegraphics[width=0.48\textwidth]{../graphs/resnet50_val_loss_per_epoch.png}}
-    \subfloat[\centering Pérdida por época]{\includegraphics[width=0.48\textwidth]{../graphs/resnet50_val_f1_per_epoch.png}}\hfill
-    \caption{Gráficos de pérdida y f1 score por época usando Resnet50}
-    \label{fig:Resnet50}
-\end{figure}
-
-Las ejecuciones de Resnet50 generaron patrones más estables 
-en ambos gráficos. En ese sentido la mayoría tuvo un descenso 
-de la pérdida bastante similar entre ellos. Al compararlos 
-teniendo en cuenta el early stopping, en la época 6 se 
-generó una menor pérdida con el modelo de 6 épocas, lo cuál 
-también concordó con ser el modelo con mejor f1 score de entre 
-todos. Un dato interesante a analizar es el de la configuración 
-con 7 celdas, el cual generó picos erráticos en el entrenamiento, 
-lo cual también se reflejó en el gráfico de f1 score. Además, 
-la configuración de 5 celdas tuvo una mayor cántidad de épocas 
-de entrenamiento a comparación de los demás.
-
-A continuación se muestran las métricas finales por cada uno de 
-los modelos:
+La Tabla \ref{table:b0Metrics} muestra una comparativa 
+entre los resultados obtenidos para el \textit{pipeline} manteniendo 
+los vectores de características obtenidas a través de EfficientNetB0 
+de los frames del \textit{dataset Hockey Fights}.\\
 
 \begin{table}[h!]
 \centering
+\footnotesize
+\caption{Métricas obtenidas por configuración de celdas para EfficientNetB0.}
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
-\textbf{1}           & 0.0347               & 0.9873             & 0.2488             & 0.9408           & 0.0974              & 0.9725            \\ \hline
-\textbf{2}           & 0.1213               & 0.9564             & 0.2392             & 0.9399           & 0.1674              & 0.9525            \\ \hline
-\textbf{3}           & 0.0209               & 0.9902             & 0.1862             & 0.958            & 0.0698              & 0.9825            \\ \hline
-\textbf{4}           & 0.047                & 0.9929             & \textbf{0.1038}    & 0.9541           & 0.1133              & 0.9575            \\ \hline
-\textbf{5}           & 0.058                & 0.979              & 0.1506             & 0.9581           & 0.1049              & 0.97              \\ \hline
-\textbf{6}           & 0.029                & 0.9931             & 0.1599             & 0.9541           & 0.0919              & 0.9725            \\ \hline
-\textbf{7}           & 0.0258               & 0.9933             & 0.1367             & 0.9541           & 0.0691              & \textbf{0.985}    \\ \hline
-\textbf{8}           & 0.0214               & 0.9929             & 0.2205             & 0.9412           & 0.1213              & 0.9625            \\ \hline
-\textbf{9}           & \textbf{0.012}       & \textbf{0.9961}    & 0.1564             & \textbf{0.9667}  & \textbf{0.0605}     & \textbf{0.98}     \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Celdas \\ Bi-LSTM\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ prueba\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ prueba\end{tabular}} \\ \hline
+\textbf{1}                                                         & 0.07                                                                      & 0.98                                                                       & 0.22                                                                   & 0.94                                                                    & 0.12                                                               & 0.97                                                                \\ \hline
+\textbf{2}                                                         & 0.05                                                                      & 0.99                                                                       & 0.1                                                                    & 0.98                                                                    & 0.08                                                               & 0.98                                                                \\ \hline
+\textbf{3}                                                         & 0.04                                                                      & 0.99                                                                       & 0.16                                                                   & 0.96                                                                    & 0.08                                                               & 0.98                                                                \\ \hline
+\textbf{4}                                                         & 0.02                                                                      & 0.99                                                                       & 0.14                                                                   & 0.95                                                                    & 0.08                                                               & 0.97                                                                \\ \hline
+\textbf{5}                                                         & 0.02                                                                      & 0.99                                                                       & 0.16                                                                   & 0.96                                                                    & 0.07                                                               & 0.98                                                                \\ \hline
+\textbf{6}                                                         & \textbf{0.0}                                                              & \textbf{1.0}                                                               & \textbf{0.15}                                                          & \textbf{0.98}                                                           & \textbf{0.03}                                                      & \textbf{0.99}                                                       \\ \hline
+\textbf{7}                                                         & 0.05                                                                      & 0.99                                                                       & 0.19                                                                   & 0.96                                                                    & 0.13                                                               & 0.96                                                                \\ \hline
+\textbf{8}                                                         & 0.03                                                                      & 0.99                                                                       & 0.14                                                                   & 0.98                                                                    & 0.06                                                               & 0.99                                                                \\ \hline
+\textbf{9}                                                         & 0.02                                                                      & 0.99                                                                       & 0.14                                                                   & 0.98                                                                    & 0.09                                                               & 0.98                                                                \\ \hline
 \end{tabular}
-\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para EfficientNetB0.}
-\label{table:efficientnetb0Metrics}
+\label{table:b0Metrics}
 \end{table}
 
 
-En la tabla \ref{table:efficientnetb0Metrics} se las tienen 
-métricas de pérdida y f1 score para todas las etapas: 
-entrenamiento, validación y testeo para cada una de las 
-configuraciones. En ella se puede ver que los mejores 
-resultados de manera casi general fue la configuración de 9 
-celdas, lo cual no se refleja con los resultados de validación 
-que se vieron en los gráficos de pérdida y f1 score anteriormente 
-mostrados. 
+En la Tabla \ref{table:b0Metrics} se puede observar 
+que los mejores resultados a lo largo de todos los pasos del 
+\textit{pipeline} fue la configuración de 6 celdas, generando 99\% de 
+\textit{accuracy} en prueba. Además, se pudo observar que los 
+resultados de las demás configuraciones fueron similares a lo largo de 
+todas las confguraciones, pero si se revisa los valores entre ellas, 
+es claro que todos ellos empeoran mientras más se alejan de esa 
+configuración, salvo en la configuración con 6 celdas que es un caso 
+anómalo.\\
 
+A continuación se presentan las gráficas de pérdida y \textit{accuracy} 
+de esta configuración.
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/efficientnetb0_best_val_accuracy.png} 
+    \centering 
+    \caption{\textit{Accuracy} por época de EfficientNetB0 y 6 capas Bi-LSTM } 
+    \label{EfficientNetB0Accuracy} 
+\end{figure}
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/efficientnetb0_best_val_loss.png}
+    \centering 
+    \caption{Pérdida por época de EfficientNetB0 y 6 capas Bi-LSTM } 
+    \label{EfficientNetB0Loss} 
+\end{figure}
+
+
+Los gráficos de las Figuras \ref{EfficientNetB0Accuracy} y 
+\ref{EfficientNetB0Loss} muestran lo anteriormente mencionado acerca de 
+que el dataset es bastante sencillo como para entrenar un modelo 
+para clasificarlo. Durante la primera época, la pérdida baja a alrededor 
+de 0.25 mientras que el accuracy logra llegar a 95\% en validación, 
+lo cual indica que no está sobreajustandose a los datos de entrenamiento.\\ 
+
+\textbf{\underline{Resultados obtenidos con EfficinetnetV2}}\\
+
+De la misma manera, la Tabla  \ref{table:efficientnetV2Metrics} 
+muestra una comparativa entre los resultados obtenidos para el 
+\textit{pipeline} manteniendo los vectores de características 
+obtenidas a través de EfficientNetV2 de los frames del 
+\textit{dataset Hockey Fights}.
 
 \begin{table}[h!]
 \centering
+\footnotesize
+\caption{Métricas obtenidas por configuración de celdas para EfficientNetV2.}
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
-\textbf{1}  & 0.0833               & 0.9693             & 0.2338             & 0.932            & 0.12                & 0.9675            \\ \hline
-\textbf{2}  & 0.048                & 0.9869             & \textbf{0.1492}    & \textbf{0.9586}  & 0.0849              & 0.9775            \\ \hline
-\textbf{3}  & 0.185                & 0.9349             & 0.3138             & 0.8779           & 0.2181              & 0.9175            \\ \hline
-\textbf{4}  & 0.1111               & 0.9605             & 0.268              & 0.9187           & 0.1375              & 0.96              \\ \hline
-\textbf{5}  & 0.0228               & 0.9936             & 0.1915             & 0.927            & 0.0666              & \textbf{0.9825}   \\ \hline
-\textbf{6}  & 0.0396               & 0.9875             & 0.1626             & \textbf{0.9537}  & 0.0789              & \textbf{0.98}     \\ \hline
-\textbf{7}  & 0.1473               & 0.9402             & 0.2269             & 0.932            & 0.1458              & 0.96              \\ \hline
-\textbf{8}  & 0.0504               & 0.9872             & 0.1829             & 0.9139           & 0.1408              & 0.95              \\ \hline
-\textbf{9}  & \textbf{0.018}       & \textbf{0.9969}    & 0.2741             & 0.9295           & \textbf{0.0649}     & \textbf{0.9825}   \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Celdas \\ Bi-LSTM\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ prueba\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ prueba\end{tabular}} \\ \hline
+\textbf{1}                                                         & 0.07                                                                      & 0.99                                                                       & 0.23                                                                   & 0.94                                                                    & 0.11                                                               & 0.97                                                                \\ \hline
+\textbf{2}                                                         & 0.08                                                                      & 0.98                                                                       & 0.22                                                                   & 0.94                                                                    & 0.15                                                               & 0.96                                                                \\ \hline
+\textbf{3}                                                         & 0.07                                                                      & 0.98                                                                       & 0.26                                                                   & 0.94                                                                    & 0.1                                                                & 0.96                                                                \\ \hline
+\textbf{4}                                                         & 0.05                                                                      & 0.99                                                                       & 0.42                                                                   & 0.89                                                                    & 0.09                                                               & 0.98                                                                \\ \hline
+\textbf{5}                                                         & \textbf{0.02}                                                             & \textbf{1.0}                                                               & 0.23                                                                   & 0.94                                                                    & \textbf{0.06}                                                      & \textbf{0.99}                                                       \\ \hline
+\textbf{6}                                                         & 0.08                                                                      & 0.97                                                                       & 0.34                                                                   & 0.94                                                                    & 0.08                                                               & 0.98                                                                \\ \hline
+\textbf{7}                                                         & 0.03                                                                      & 0.99                                                                       & 0.18                                                                   & 0.96                                                                    & 0.08                                                               & 0.98                                                                \\ \hline
+\textbf{8}                                                         & 0.1                                                                       & 0.96                                                                       & 0.18                                                                   & 0.94                                                                    & 0.14                                                               & 0.95                                                                \\ \hline
+\textbf{9}                                                         & 0.04                                                                      & 0.99                                                                       & \textbf{0.16}                                                          & \textbf{0.96}                                                           & 0.09                                                               & 0.97                                                                \\ \hline
 \end{tabular}
-\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para EfficientnetV2.}
 \label{table:efficientnetV2Metrics}
 \end{table}
 
-A comparación de la anterior tabla, utilizando los datos de la tabla 
-\ref{table:efficientnetV2Metrics} no se puede sacar una conclusión 
-específica acerca de cual configuración es la mejor a comparación del resto. 
-Esto se puede ver debido a que los mejores resultados (obtenidos con 9 celdas) 
-son diferentes para validación que para entrenamiento y testing. Además, 
-al revisar los datos de los gráficos de validación mostrados anteriormente, se 
-pudo ver que este estaba generando un ligero overfitting. 
+En la Tabla \ref{table:efficientnetV2Metrics} se puede observar 
+que la configuración que obtuvo el mejor desempeño general fue 
+la de 5 celdas Bi-LSTM, alcanzando un \textit{accuracy} del 99\% 
+en la prueba. En general, se puede ver que los resultados se mantienen 
+consistentes entre configuraciones, con una leve caída en 
+rendimiento en el extremo superior con 9 celdas, que mostró el peor 
+resultado en prueba (97\% de \textit{accuracy}). Esto sugiere que 
+aumentar el número de celdas o introducir un menor número puede 
+introducir ruido o sobreajuste.\\
+
+A continuación se presentan las gráficas de pérdida y 
+\textit{accuracy} correspondientes a esta configuración óptima.
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/efficientnetv2-s_best_val_accuracy.png} 
+    \centering 
+    \caption{\textit{Accuracy} por época de EfficientNetV2 y 5 capas Bi-LSTM } 
+    \label{EfficientNetV2Accuracy} 
+\end{figure}
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/efficientnetv2-s_best_val_loss.png}
+    \centering 
+    \caption{Pérdida por época de EfficientNetV2 y 5 capas Bi-LSTM } 
+    \label{EfficientNetV2Loss} 
+\end{figure}
+
+
+De la misma manera, Los gráficos de las Figuras \ref{EfficientNetV2Accuracy} y 
+\ref{EfficientNetV2Loss} muestran el mismo patrón mencionado con los 
+experimentos realizados con EfficientNetB0, en donde se obtiene un 
+descenso de pérdida y aumento de \textit{accuracy} bastante rápido desde 
+la primera época. Durante esta, la pérdida baja a alrededor 
+de 0.35 mientras que el accuracy logra llegar a 90\% en validación, 
+lo cual indica que no está sobreajustandose a los datos de entrenamiento.\\ 
+
+\textbf{\underline{Resultados obtenidos con MobileNetV3}}\\
+
+A continuación se muestra la Tabla \ref{table:MobileNetV3Metrics} 
+la cual conteniendo los resultados obtenidos para el 
+\textit{pipeline} manteniendo los vectores de características 
+obtenidas a través de \textit{MobileNetV3} de los frames del 
+\textit{dataset Hockey Fights}.
 
 \begin{table}[h!]
 \centering
+\footnotesize
+\caption{Métricas obtenidas por configuración de celdas para MobileNetV3.}
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
-\textbf{1}           & 0.0562               & 0.9875             & \textbf{0.1048}    & \textbf{0.9716}  & \textbf{0.0721}     & \textbf{0.9825}   \\ \hline
-\textbf{2}           & 0.0527               & 0.9845             & 0.2139             & 0.9287           & 0.1006              & 0.9775            \\ \hline
-\textbf{3}           & \textbf{0.0237}      & \textbf{0.9969}    & 0.1774             & 0.9408           & 0.1117              & 0.965             \\ \hline
-\textbf{4}           & 0.092                & 0.9655             & 0.2456             & 0.8904           & 0.1914              & 0.935             \\ \hline
-\textbf{5}           & 0.1141               & 0.9649             & 0.3142             & 0.9295           & 0.1982              & 0.9325            \\ \hline
-\textbf{6}           & 0.0376               & 0.987              & 0.2237             & 0.9283           & 0.1158              & 0.97              \\ \hline
-\textbf{7}           & 0.0376               & 0.986              & 0.1745             & 0.9537           & \textbf{0.0706}     & 0.9775            \\ \hline
-\textbf{8}           & 0.0497               & 0.986              & 0.186              & 0.9413           & 0.1219              & 0.965             \\ \hline
-\textbf{9}           & 0.0807               & 0.9772             & 0.1777             & 0.9282           & 0.1368              & 0.9625            \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Celdas \\ Bi-LSTM\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ prueba\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ prueba\end{tabular}} \\ \hline
+\textbf{1}                                                         & 0.18                                                                      & 0.94                                                                       & 0.24                                                                   & 0.93                                                                    & 0.18                                                               & 0.95                                                                \\ \hline
+\textbf{2}                                                         & 0.04                                                                      & \textbf{0.99}                                                              & 0.2                                                                    & 0.94                                                                    & 0.08                                                               & 0.98                                                                \\ \hline
+\textbf{3}                                                         & \textbf{0.02}                                                             & \textbf{0.99}                                                              & 0.24                                                                   & 0.95                                                                    & 0.07                                                               & 0.98                                                                \\ \hline
+\textbf{4}                                                         & 0.06                                                                      & 0.98                                                                       & \textbf{0.15}                                                          & \textbf{0.96}                                                           & 0.1                                                                & 0.98                                                                \\ \hline
+\textbf{5}                                                         & 0.05                                                                      & \textbf{0.99}                                                              & 0.18                                                                   & 0.95                                                                    & 0.1                                                                & 0.97                                                                \\ \hline
+\textbf{6}                                                         & 0.07                                                                      & 0.98                                                                       & 0.18                                                                   & 0.94                                                                    & 0.11                                                               & 0.96                                                                \\ \hline
+\textbf{7}                                                         & 0.03                                                                      & \textbf{0.99}                                                              & 0.19                                                                   & 0.94                                                                    & 0.08                                                               & 0.97                                                                \\ \hline
+\textbf{8}                                                         & 0.06                                                                      & 0.98                                                                       & 0.23                                                                   & 0.94                                                                    & 0.17                                                               & 0.94                                                                \\ \hline
+\textbf{9}                                                         & 0.06                                                                      & 0.98                                                                       & 0.19                                                                   & 0.95                                                                    & \textbf{0.05}                                                      & \textbf{0.99}                                                       \\ \hline
 \end{tabular}
-\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para MobileNetV3.}
 \label{table:MobileNetV3Metrics}
 \end{table}
 
-La tabla \ref{table:MobileNetV3Metrics} muestra resultados más 
-concluyentes a comparación de las demás. Al igual que con los gráficos 
-anteriores, se puede ver que si bien no se obtuvieron los mejores 
-resultados finales para entrenamiento, si lo hizo para prueba y testeo. 
-Además, se puede ver que estos empeoran mientras más celdas de BI-LSTM 
-se usan. En ese sentido, se puede afirmar que esta es la mejor 
-configuración para este modelo, 
+A comparación de los anteriores dos experimentos, no se logró ver 
+ningún patrón característico con respecto al número de capas y la pérdida 
+o el \textit{accuracy}. De la misma manera, no se obtuvo un modelo 
+sobresaliente en cada una de las etapas de entrenamiento, validación y 
+prueba. En ese sentido, se consideró como el mejor modelo al de 9 celdas 
+Bi-LSTM debido a su \textit{accuracy} final en prueba, y a continuación 
+se muestran las gráficas de pérdida y 
+\textit{accuracy} correspondientes.\\
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/MobileNetV3large_best_val_accuracy.png} 
+    \centering 
+    \caption{\textit{Accuracy} por época de MobileNetV3 y 5 capas Bi-LSTM } 
+    \label{MobileNetV3Accuracy} 
+\end{figure}
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/MobileNetV3large_best_val_loss.png}
+    \centering 
+    \caption{Pérdida por época de MobileNetV3 y 5 capas Bi-LSTM } 
+    \label{MobileNetV3Loss} 
+\end{figure}
+
+A comparación de las otras gráficas se logra ver un entrenamiento menos 
+parejos, sobretodo si se ve la Figura \ref{MobileNetV3Loss} en donde 
+llegado a la época 4, la gráfica se vuelve anómala en el entrenamiento. \\
+
+\textbf{\underline{Resultados obtenidos con Resnet50}}\\
+
+A continuación se muestra la Tabla  \ref{table:ResNet50} 
+la cual conteniendo los resultados obtenidos para el 
+\textit{pipeline} manteniendo los vectores de características 
+obtenidas a través de \textit{Resnet50} de los frames del 
+\textit{dataset Hockey Fights}.\\
 
 \begin{table}[h!]
 \centering
+\footnotesize
+\caption{Métricas obtenidas por configuración de celdas para ResNet50.}
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-\textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
-\textbf{1}           & 0.1039               & 0.9769             & 0.1382             & \textbf{0.9716}  & 0.116               & 0.9725            \\ \hline
-\textbf{2}           & 0.0907               & 0.9808             & 0.2067             & 0.9448           & 0.1111              & 0.97              \\ \hline
-\textbf{3}           & 0.0837               & 0.9771             & \textbf{0.1177}    & 0.9586           & 0.1183              & 0.9675            \\ \hline
-\textbf{4}           & \textbf{0.0471}      & \textbf{0.9904}    & 0.1298             & 0.9537           & \textbf{0.0858}     & \textbf{0.98}     \\ \hline
-\textbf{5}           & \textbf{0.049}       & \textbf{0.993}     & 0.1499             & 0.9148           & \textbf{0.0866}     & \textbf{0.9775}   \\ \hline
-\textbf{6}           & 0.0925               & 0.9649             & 0.1553             & 0.9541           & 0.0973              & 0.975             \\ \hline
-\textbf{7}           & 0.1106               & 0.9551             & 0.18               & 0.9448           & 0.1374              & 0.9525            \\ \hline
-\textbf{8}           & 0.1262               & 0.9576             & 0.1257             & 0.9399           & 0.1074              & 0.975             \\ \hline
-\textbf{9}           & 0.0624               & 0.9872             & 0.1742             & \textbf{0.9716}  & 0.1188              & 0.97              \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}Celdas \\ Bi-LSTM\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ validacion\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Perdida \\ prueba\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ prueba\end{tabular}} \\ \hline
+\textbf{1}                                                         & 0.11                                                                      & 0.97                                                                       & \textbf{0.14}                                                          & \textbf{0.98}                                                           & 0.1                                                                & 0.97                                                                \\ \hline
+\textbf{2}                                                         & 0.2                                                                       & 0.94                                                                       & 0.17                                                                   & 0.91                                                                    & 0.19                                                               & 0.94                                                                \\ \hline
+\textbf{3}                                                         & 0.08                                                                      & 0.97                                                                       & 0.21                                                                   & 0.93                                                                    & 0.12                                                               & 0.96                                                                \\ \hline
+\textbf{4}                                                         & 0.15                                                                      & 0.96                                                                       & 0.17                                                                   & 0.95                                                                    & 0.14                                                               & 0.96                                                                \\ \hline
+\textbf{5}                                                         & 0.05                                                                      & 0.98                                                                       & \textbf{0.16}                                                          & \textbf{0.98}                                                           & 0.12                                                               & 0.97                                                                \\ \hline
+\textbf{6}                                                         & 0.15                                                                      & 0.96                                                                       & 0.19                                                                   & 0.94                                                                    & 0.2                                                                & 0.95                                                                \\ \hline
+\textbf{7}                                                         & \textbf{0.03}                                                             & \textbf{0.99}                                                              & \textbf{0.16}                                                          & 0.96                                                                    & \textbf{0.09}                                                      & \textbf{0.98}                                                       \\ \hline
+\textbf{8}                                                         & 0.08                                                                      & 0.98                                                                       & 0.23                                                                   & 0.93                                                                    & 0.16                                                               & 0.94                                                                \\ \hline
+\textbf{9}                                                         & 0.08                                                                      & 0.98                                                                       & \textbf{0.16}                                                          & 0.95                                                                    & 0.13                                                               & 0.96                                                                \\   \hline
 \end{tabular}
-\caption{ Tabla comparativa de las métricas obtenidas por configuración de celdas para Resnet50.}
-\label{table:Resnet50}
+\label{table:ResNet50}
 \end{table}
 
-Observando los datos de la tabla \ref{table:Resnet50} es 
-notorio que los mejores resultados estuvieron en las 
-configuraciones medias (4 y 5 celdas). Además también se 
-logra idntificar que mientras más o menos celdas, todas las 
-métricas se reducen, salvo con el caso de 9 celdas, el cual 
-es un dato anómalo en esa distribución. 
 
-Por último, a continuación se mostrará una tabla comparativa 
-resumen de toda la experimentación realizada en el presente trabajo: 
+En la Tabla \ref{table:ResNet50} se puede observar 
+que la configuración que obtuvo el mejor desempeño casi general fue 
+la de 7 celdas Bi-LSTM, alcanzando un \textit{accuracy} del 98\% 
+en la prueba. En general, se puede ver que el rendimiento de los modelos 
+decae conforme el número de celdas se aleja de 7 en todas las métricas, 
+Esto sugiere también que aumentar el número de celdas o introducir 
+un menor número puede introducir ruido o sobreajuste.
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/resnet50_best_val_accuracy.png} 
+    \centering 
+    \caption{\textit{Accuracy} por época de ResNet50 y 7 capas Bi-LSTM } 
+    \label{ResNet50Accuracy} 
+\end{figure}
+
+\begin{figure}[h!] 
+    \includegraphics[width=0.8\textwidth]{../graphs/resnet50_best_val_loss.png}
+    \centering 
+    \caption{Pérdida por época de ResNet50 y 7 capas Bi-LSTM } 
+    \label{ResNet50Loss} 
+\end{figure}
+
+Al igual que en la anterior experimentación, en la gráfica se logra ver 
+un entrenamiento menos parejo, sobretodo si se ve la Figura 
+\ref{ResNet50Loss} en donde llegado a la época 4, generando el mismo 
+comportamiento anterior.\\
+
+\subsection{Comparativa final}
+
+A continuación se realizará una comparativa a modo de resumen  
+de toda la experimentación realizada en el presente trabajo con 
+los mejores resultados obtenidos. La Tabla \ref{table:comparacion} 
+muestra todas las métricas utilizadas anteriormente para los mejores 
+resultados de cada experimento.
 
 \begin{table}[h!]
 \centering
+\caption{Tabla comparativa resumen final de la experimentación}
+{\fontsize{6}{7}\selectfont
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
-\textbf{cnn\_model}     & \textbf{lstm\_cells} & \textbf{train\_loss} & \textbf{train\_f1} & \textbf{val\_loss} & \textbf{val\_f1} & \textbf{test\_loss} & \textbf{test\_f1} \\ \hline
-\textbf{EfficientNetB0} & 9                    & \textbf{0.012}       & \textbf{0.9961}    & 0.1564             & \textbf{0.9716}  & \textbf{0.0605}     & \textbf{0.98}     \\ \hline
-\textbf{EfficientNetV2} & 9                    & 0.018                & \textbf{0.9969}    & 0.2741             & 0.9295           & \textbf{0.0649}     & \textbf{0.9825}   \\ \hline
-\textbf{MobileNetV3}    & 1                    & 0.0562               & 0.9875             & \textbf{0.1048}    & \textbf{0.9716}  & 0.0721              & \textbf{0.9825}   \\ \hline
-\textbf{ResNet50}       & 4                    & 0.0471               & 0.9904             & 0.1298             & 0.9537           & 0.0858              & \textbf{0.98}     \\ \hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \textbf{\begin{tabular}[c]{@{}l@{}}Pérdida \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Capas \\ Bi-LSTM\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ entrenamiento\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Pérdida \\ validación\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ validación\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Pérdida \\ prueba\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Accuracy \\ prueba\end{tabular}} \\ \hline
+\textbf{EfficientNetB0} & 6                    & \textbf{0.00}      & \textbf{1.00}             & \textbf{0.15}   & \textbf{0.98}     & \textbf{0.03}    & \textbf{0.99}     \\ \hline
+\textbf{EfficientNetV2} & \textbf{5}           & 0.02               & \textbf{1.00}             & 0.23            & 0.94              & 0.06             & \textbf{0.99}   \\ \hline
+\textbf{MobileNetV3}    & 9                    & 0.06               & 0.98                      & 0.19            & 0.95              & 0.05             & \textbf{0.99}   \\ \hline
+\textbf{ResNet50}       & 7                    & 0.03               & 0.99                      & 0.16            & 0.96              & 0.09             & 0.98     \\ \hline
 \end{tabular}
-\caption{ Tabla comparativa resumen final de la experimentación}
-\label{table:Resnet50}
+}
+\label{table:comparacion}
 \end{table}
 
 Con los resultados finales se puede corroborar que todas las 
-combinaciones entre CNN y LSTM lograron valores similares para 
-todas las métricas de testeo al tener un f1 score . En ese sentido, 
-y con el fin de optimizar el \textit{pipeline} final para el 
-\textit{dataset} propuesto, sería recomendable utilizar MobileNetV3 
-con una celda LSTM, ya que proporcionó el mismo resultado pero tanto 
-el peso del modelo como el número de celdas es menor que en todas las 
-demás configuraciones.
+combinaciones entre CNN y Bi-LSTM lograron valores similares para 
+todas las métricas de testeo al tener un \textit{accuracy} alto y similar 
+(98-99\%). Aún así, es importante resaltar que en todas las métricas a lo 
+largo del proceso de entrenamiento, validación y prueba, EfficientNetB0 
+fue quien obtuvo los mejores resultados en comparación al resto 
+(incluyendo el necesitar la menor cantidad de capas Bi-LSTM). En ese 
+sentido, y con el fin de optimizar el \textit{pipeline} final de 
+manera general, sería recomendable utilizar EfficientNetB0 como extractor 
+de características. \\
+
+Por otra parte, y basado en los resultados de todas 
+las tablas comparativas anteriormente ilustradas, es recomendable tratar 
+de encontrar la configuración con el número de celdas correcto, para 
+optimizar el \textit{pipeline} final. Utilizando los patrones 
+encontrados, se puede ver que las métricas van a ir mejorando conforme 
+más capas se aumente, hasta cierto límite, siendo ese el número ideal 
+de capas Bi-LSTM que se debe utilizar.

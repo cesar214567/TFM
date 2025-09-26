@@ -1,7 +1,5 @@
 \documentclass[11pt,a4paper,spanish]{book}
 \usepackage{estilo_unir-1}
-\usepackage{apacite}
-
 \usepackage{hyperref}
 \numberwithin{equation}{chapter}
 %\usepackage{caption}
@@ -10,6 +8,8 @@
 \usepackage{float}
 \usepackage{subfig}
 \usepackage{amsmath}
+\usepackage{apacite}
+\bibliographystyle{apacite}
 
 %\usepackage{chngcntr}
 %\counterwithin{equation}{chapter}
@@ -33,10 +33,10 @@
 %---------------------------
 %título del trabajo y autor
 %---------------------------
-\title{Optimización de un pipeline basado en BI-LSTM para la detección de violencia en video}
+\title{Detección de violencia en vídeo mediante la comparativa de CNN's junto con capas Bi-LSTM}
 \titulacion{Máster en en Ingeniería Matemática y Computación}
 \author{Cesar Antonio Madera Garcés}
-\date{23 de Marzo de 2025}
+\date{16 de Julio de 2025}
 \director{ Pablo Negre Rodriguez}
 \nombreciudad{Lima, Perú}
 
@@ -65,8 +65,6 @@
 \chapter{Resumen}
 \input{./content/resumen.tex}
 
-
-
 \chapter{Abstract}
 \input{./content/abstract.tex}
 
@@ -75,14 +73,11 @@
 \input{./content/introduccion.tex}
 
 
-\chapter{Contexto}
+\chapter{Contexto y Estado del Arte}
 \input{./content/contextoYarte.tex}
 
 \chapter{Objetivos}
-\input{./content/objetivos.tex}\label{objetivos}
-
-\chapter{Metodología}
-\input{./content/metodologia.tex}
+\input{./content/objetivos.tex}
 
 \chapter{Desarrollo del trabajo}
 \input{./content/experimentacion.tex}
@@ -95,7 +90,7 @@
 %\textit{nombre referencia.}
 %Información addicional
 %\end{thebibliography}
-\bibliographystyle{apacite}
+\newpage
 \bibliography{bibliografia}
 
 \appendix

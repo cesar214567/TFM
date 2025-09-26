@@ -1,9 +1,9 @@
 La violencia sigue siendo un problema global crítico, con millones 
 de incidentes reportados anualmente. Según la Organización Mundial 
-de la Salud (OMS), la violencia interpersonal ha permanecido como 
+de la Salud \cite{WorldHealthOrganization2024}, la violencia interpersonal ha permanecido como 
 una de las 10 principales causas de muerte anual en las regiones 
 de las Américas, con innumerables casos de agresión física y 
-delitos violentos que no se reportan \cite{WorldHealthOrganization2024}. 
+delitos violentos que no se reportan . 
 América Latina, en particular, tiene algunas de las tasas de violencia 
 más altas, con países como Perú, Chile, Brasil, Colombia y México 
 enfrentando importantes desafíos en la prevención del crimen y 
@@ -12,13 +12,13 @@ de Estadística y Geografía (INEGI) reportó 21.9 millones de víctimas
 mayores de edad solo en México, y 31.3 millones de delitos \cite{INEGI2024}. 
 La creciente disponibilidad de videovigilancia y medios digitales 
 presenta una oportunidad para desarrollar sistemas automatizados 
-capaces de detectar y mitigar incidentes violentos en tiempo real.
+capaces de detectar y mitigar incidentes violentos en tiempo real.\\
 
 La inteligencia artificial (IA) ha emergido como una herramienta 
 potente en el campo del análisis de video, ofreciendo soluciones 
 prometedoras para la detección automatizada de violencia. Los modelos 
 de aprendizaje profundo, particularmente las redes neuronales 
-convolucionales (CNNs) y las redes de memoria a largo y corto plazo 
+convolucionales (CNN) y las redes de memoria a largo y corto plazo 
 (LSTM), han demostrado capacidades excepcionales en el procesamiento 
 de características espaciotemporales de los datos de video \cite{Orozco2021}. 
 Aprovechando estas tecnologías, los sistemas basados en IA pueden 
@@ -28,7 +28,7 @@ la escasez de datos y los falsos positivos siguen siendo obstáculos
 críticos en las aplicaciones del mundo real \cite{Kulkarni2021}. Esta 
 investigación tiene como objetivo mejorar la robustez e interpretabilidad 
 de los sistemas de detección de violencia impulsados por IA, contribuyendo 
-a entornos más seguros en México y más allá.
+a entornos más seguros en México y el mundo.
 
 \section{Justificación}
 
@@ -41,20 +41,20 @@ humana, a menudo son ineficientes debido a la fatiga cognitiva y
 las limitaciones en la escalabilidad \cite{Marois2021}. La inteligencia 
 artificial (IA), particularmente el aprendizaje profundo, ha demostrado 
 un gran potencial para automatizar la detección de violencia mediante 
-la integración de redes neuronales convolucionales (CNNs) y redes de 
-memoria a largo y corto plazo (LSTM) \cite{Negre2024,Negre20242,Abdali2019,Sharma2021}. 
-Mientras que las CNNs extraen características espaciales de los 
+la integración de redes neuronales convolucionales (CNN) y redes de 
+memoria a largo y corto plazo (LSTM) \citeNP{Negre2024},\citeNP{Negre20242} ,\citeNP{Abdali2019},\citeNP{Sharma2021}. 
+Mientras que las CNN extraen características espaciales de los 
 fotogramas de video, las LSTMs capturan dependencias temporales, 
 lo que las convierte en una combinación poderosa para analizar 
 escenas dinámicas. Sin embargo, el diseño óptimo de estos modelos 
 sigue siendo un desafío abierto, ya que las variaciones en las 
 arquitecturas de CNN y las configuraciones de LSTM afectan directamente 
 la precisión de la detección, la eficiencia computacional y la aplicabilidad 
-en el mundo real.
+en el mundo real.\\
 
 Este estudio busca investigar sistemáticamente el balance 
 entre diferentes extractores de características de CNN y el número 
-de celdas LSTM para determinar la pipeline más efectiva para la 
+de celdas LSTM para determinar el \textit{pipeline} más efectiva para la 
 detección de violencia. La elección de la CNN influye en la calidad 
 de la extracción de características, mientras que el número de celdas 
 LSTM impacta en la capacidad del modelo para capturar patrones temporales 
@@ -64,34 +64,47 @@ la eficiencia de los sistemas de detección de violencia impulsados por IA.
 Los resultados contribuirán no solo al avance académico del análisis 
 espaciotemporal de video, sino también al despliegue práctico de soluciones 
 de videovigilancia robustas y escalables, mejorando finalmente la seguridad 
-pública en México y más allá.
+pública en México y más allá.\\
 
 A continuación se especifican tanto el enfoque de este 
 trabajo y cual será la estructura del resto del 
-documento.
+trabajo.
 
 \section{Enfoque de Trabajo}
 
 Habiendo establecido la justificación para esta investigación, 
-es evidente que la selección de técnicas de extracción de 
+es conveniente señalar que la selección de técnicas de extracción de 
 características y el número de celdas LSTM juegan un papel crucial 
 en la optimización de los modelos de detección de violencia. Los enfoques 
 existentes a menudo pasan por alto el balance entre estos dos factores, 
 lo que puede limitar el rendimiento en aplicaciones del mundo real. 
 Por lo tanto, este estudio tiene como objetivo evaluar y refinar 
 el balance entre los extractores de características de CNN y las 
-configuraciones de celdas LSTM para desarrollar una pipeline más 
-eficiente y precisa para la detección automatizada de violencia.
+configuraciones de celdas LSTM para desarrollar un \textit{pipeline} más 
+eficiente y preciso para la detección automatizada de violencia.
 
-\section{Estructura del Documento}
+\section{Estructura del Trabajo}
 
-Este documento se organiza en varios apartados que permiten 
-comprender el desarrollo completo del trabajo. Primero, se 
-expone el contexto del problema y su relevancia. Luego, se 
-definen los objetivos de la investigación. La sección de 
-metodología describe los datos utilizados, el preprocesamiento 
-y el enfoque técnico adoptado. A continuación, en el desarrollo 
-del trabajo, se detallan los experimentos realizados, las 
-configuraciones evaluadas y los resultados obtenidos. Finalmente, 
-se presentan las conclusiones y se proponen posibles líneas de 
-trabajo futuro.
+Este trabajo se organiza en varios apartados que 
+permiten comprender de manera estructurada el 
+desarrollo completo del trabajo. En el Capítulo 2, 
+se presenta el contexto del problema y el estado del arte, 
+destacando la relevancia del análisis automático de 
+violencia en videos y los enfoques previos basados en 
+arquitecturas híbridas. \\\\
+
+En el Capítulo 3, se abordan los 
+objetivos de la investigación, incluyendo tanto el 
+objetivo general como los específicos, así como la 
+metodología empleada, la cual consiste en la combinación 
+de redes neuronales convolucionales (CNN) con capas 
+bidireccionales LSTM (Bi-LSTM). \\\\
+
+En el Capítulo 4, dedicado al desarrollo del trabajo, se describen 
+detalladamente los experimentos realizados, las 
+configuraciones evaluadas y los resultados obtenidos a 
+partir del entrenamiento y evaluación de múltiples pipelines.\\\\
+
+Finalmente, en el Capítulo 5 se exponen las conclusiones extraídas del estudio y 
+se sugieren posibles líneas de trabajo futuro orientadas a 
+mejorar la eficiencia y capacidad de generalización de los modelos.
